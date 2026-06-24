@@ -1,14 +1,24 @@
 package com.example.playlistify.controller;
 
+import com.example.playlistify.model.Track;
+import com.example.playlistify.service.SpotifyService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/spotify")
+@RequestMapping("/playlistify")
 public class SpotifyController {
 
+    private final SpotifyService spotifyService;
+
+    public SpotifyController(SpotifyService spotifyService) {
+        this.spotifyService = spotifyService;
+    }
+
     @GetMapping("/getlikedsongs")
-    public String getlikedsongs(){
-        return "working too";
+    public List<Track> getLikedSongs() {
+        return spotifyService.getLikedSongs();
     }
 
     @GetMapping("/ooo")
