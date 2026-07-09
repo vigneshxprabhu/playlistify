@@ -1,0 +1,5 @@
+spring.application.name=playlistify
+
+spotify.client-id=YOUR_CLIENT_ID
+spotify.client-secret=YOUR_CLIENT_SECRET
+spotify.redirect-uri=http://127.0.0.1:8080/playlistify/callback
