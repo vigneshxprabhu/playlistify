@@ -1,4 +1,4 @@
-package com.example.playlistify.model;
+package com.example.playlistify.model.response;
 
 public class Track {
 

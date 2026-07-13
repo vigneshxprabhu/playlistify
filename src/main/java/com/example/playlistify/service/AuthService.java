@@ -1,6 +1,6 @@
 package com.example.playlistify.service;
 
-import com.example.playlistify.model.TokenResponse;
+import com.example.playlistify.dto.response.tokenresponse.TokenResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
