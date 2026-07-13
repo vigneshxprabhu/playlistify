@@ -5,11 +5,7 @@ import lombok.Data;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-public class ImageDto {
+public class ExternalUrlsDto {
 
-    private String url;
-
-    private int height;
-
-    private int width;
+    private String spotify;
 }
