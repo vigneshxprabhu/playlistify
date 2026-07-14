@@ -1,14 +1,18 @@
-package com.example.playlistify.controller;
+package com.example.playlistify.controller.AuthService;
 
 import com.example.playlistify.dto.response.tokenresponse.TokenResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.playlistify.service.AuthService;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-
+@RestController
+@RequestMapping("/playlistify")
 public class AuthController {
 
     private final  AuthService authService;

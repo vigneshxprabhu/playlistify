@@ -23,6 +23,7 @@ public class AuthService {
 
        @Value("${spotify.redirect-uri}")
        private String redirectUri;
+       
        public TokenResponse exchangeCodeForToken(String code) throws Exception {
 
               String credentials = clientId + ":" + clientSecret;
