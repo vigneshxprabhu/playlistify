@@ -2,6 +2,7 @@ package com.example.playlistify.service;
 
 import com.example.playlistify.dto.response.tokenresponse.TokenResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,13 @@ public class AuthService {
 
        @Value("${spotify.redirect-uri}")
        private String redirectUri;
+
+       @Getter
+       private String accessToken;
+       @Getter
+       private String refreshToken;
+
+
        
        public TokenResponse exchangeCodeForToken(String code) throws Exception {
 
@@ -42,17 +50,26 @@ public class AuthService {
                       .header("Content-Type", "application/x-www-form-urlencoded")
                       .POST(HttpRequest.BodyPublishers.ofString(body))
                       .build();
-              System.out.println(request.headers().map());
-              System.out.println(body);
+
               HttpClient client = HttpClient.newHttpClient();
 
               HttpResponse<String> response =
                       client.send(request, HttpResponse.BodyHandlers.ofString());
 
-              System.out.println("Status: " + response.statusCode());
-              System.out.println(response.body());
-
               ObjectMapper mapper = new ObjectMapper();
-              return mapper.readValue(response.body(), TokenResponse.class);
+
+              TokenResponse token = mapper.readValue(response.body(), TokenResponse.class);
+
+
+
+              this.accessToken = token.getAccessToken();
+              this.refreshToken=token.getRefreshToken();
+
+              return token;
+
+
+
        }
+
+
 }

@@ -1,4 +1,4 @@
-package com.example.playlistify.controller.AuthService;
+package com.example.playlistify.controller.AuthController;
 
 import com.example.playlistify.dto.response.tokenresponse.TokenResponse;
 import org.springframework.http.HttpHeaders;

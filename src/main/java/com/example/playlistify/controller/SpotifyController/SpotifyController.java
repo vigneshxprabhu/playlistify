@@ -1,11 +1,6 @@
-package com.example.playlistify.controller;
-import com.example.playlistify.dto.response.tokenresponse.TokenResponse;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
+package com.example.playlistify.controller.SpotifyController;
 import com.example.playlistify.service.SpotifyService;
 import org.springframework.web.bind.annotation.*;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 import com.example.playlistify.service.AuthService;
 
