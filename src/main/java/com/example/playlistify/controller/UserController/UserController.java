@@ -2,7 +2,8 @@
 
 
  import com.example.playlistify.dto.response.UserProfileResponse.UserProfileResponse;
- import com.example.playlistify.service.UserService;
+ import com.example.playlistify.dto.response.likedsongs.LikedSongsResponse;
+ import com.example.playlistify.service.userservice.UserService;
  import org.springframework.web.bind.annotation.GetMapping;
  import org.springframework.web.bind.annotation.RequestMapping;
  import org.springframework.web.bind.annotation.RestController;
@@ -17,12 +18,17 @@
       }
 
       @GetMapping("/profile")
-     public UserProfileResponse user () throws Exception {
+     public UserProfileResponse getuser () throws Exception {
        return userService.userProfileResponse();
 
       }
 
+      @GetMapping("/likedsongs")
+     public LikedSongsResponse getLikedsongs() throws Exception{
+          return userService.likedSongsResponse();
 
+
+      }
 
 
 

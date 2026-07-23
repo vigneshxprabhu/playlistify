@@ -60,15 +60,50 @@ public class AuthService {
 
               TokenResponse token = mapper.readValue(response.body(), TokenResponse.class);
 
-
-
               this.accessToken = token.getAccessToken();
               this.refreshToken=token.getRefreshToken();
-
               return token;
 
 
 
+       }
+       public TokenResponse refreshAccessToken() throws Exception {
+
+              String credentials = clientId + ":" + clientSecret;
+
+              String basicAuth = Base64.getEncoder()
+                      .encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
+
+              String body =
+                      "grant_type=refresh_token" +
+                              "&refresh_token=" + refreshToken;
+
+              HttpRequest request = HttpRequest.newBuilder()
+                      .uri(URI.create("https://accounts.spotify.com/api/token"))
+                      .header("Authorization", "Basic " + basicAuth)
+                      .header("Content-Type", "application/x-www-form-urlencoded")
+                      .POST(HttpRequest.BodyPublishers.ofString(body))
+                      .build();
+
+              HttpClient client = HttpClient.newHttpClient();
+
+              HttpResponse<String> response =
+                      client.send(request, HttpResponse.BodyHandlers.ofString());
+
+              ObjectMapper mapper = new ObjectMapper();
+
+              TokenResponse token =
+                      mapper.readValue(response.body(), TokenResponse.class);
+
+              this.accessToken = token.getAccessToken();
+
+              // Spotify may or may not return a new refresh token.
+              // Only replace it if a new one is provided.
+              if (token.getRefreshToken() != null) {
+                     this.refreshToken = token.getRefreshToken();
+              }
+
+              return token;
        }
 
 
