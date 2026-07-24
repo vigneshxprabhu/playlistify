@@ -6,4 +6,4 @@ learing
 DTO
 nested DTO
 file structture 
-
+genric method 
