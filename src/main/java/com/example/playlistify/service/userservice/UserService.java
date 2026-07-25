@@ -4,22 +4,15 @@ package com.example.playlistify.service.userservice;
 
 import com.example.playlistify.dto.response.UserProfileResponse.UserProfileResponse;
 import com.example.playlistify.dto.response.likedsongs.LikedSongsResponse;
-import com.example.playlistify.service.AuthService;
-import com.example.playlistify.service.httpservice.SpotifyHttpService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.playlistify.Util.SpotifyHttpUtil;
 import org.springframework.stereotype.Service;
-
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 @Service
 public class UserService {
 
-    private final SpotifyHttpService spotifyHttpService;
+    private final SpotifyHttpUtil spotifyHttpService;
 
-    public UserService(SpotifyHttpService spotifyHttpService) {
+    public UserService(SpotifyHttpUtil spotifyHttpService) {
         this.spotifyHttpService = spotifyHttpService;
     }
     public UserProfileResponse userProfileResponse() throws Exception{
