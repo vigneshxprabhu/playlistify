@@ -2,11 +2,14 @@
 
 
  import com.example.playlistify.dto.response.UserProfileResponse.UserProfileResponse;
+ import com.example.playlistify.dto.response.likedsongs.Item;
  import com.example.playlistify.dto.response.likedsongs.LikedSongsResponse;
  import com.example.playlistify.service.userservice.UserService;
  import org.springframework.web.bind.annotation.GetMapping;
  import org.springframework.web.bind.annotation.RequestMapping;
  import org.springframework.web.bind.annotation.RestController;
+
+ import java.util.List;
 
  @RestController
  @RequestMapping("/playlistify")
@@ -24,8 +27,8 @@
       }
 
       @GetMapping("/likedsongs")
-     public LikedSongsResponse getLikedsongs() throws Exception{
-          return userService.likedSongsResponse();
+     public List<Item> getLikedsongs() throws Exception{
+          return userService.getLikedSongs();
 
 
       }
