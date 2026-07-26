@@ -1,0 +1,39 @@
+package com.example.playlistify.service;
+
+import com.example.playlistify.Util.SpotifyHttpUtil;
+import com.example.playlistify.dto.response.likedsongs.Item;
+import com.example.playlistify.dto.response.likedsongs.LikedSongsResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class TrackService {
+
+    private final SpotifyHttpUtil spotifyHttpService;
+
+    public TrackService(SpotifyHttpUtil spotifyHttpService) {
+        this.spotifyHttpService = spotifyHttpService;
+    }
+
+    public List<Item> getLikedSongs() throws Exception {
+
+        List<Item> likedSongs = new ArrayList<>();
+
+        String url = "https://api.spotify.com/v1/me/tracks?limit=50";
+
+        while (url != null) {
+
+            LikedSongsResponse response = spotifyHttpService.get(url, LikedSongsResponse.class);
+
+            likedSongs.addAll(response.getItems());
+
+            url = response.getNext();
+        }
+
+
+        System.out.println("Total songs fetched : " + likedSongs.size());
+
+
+        return likedSongs;
+    }
+}

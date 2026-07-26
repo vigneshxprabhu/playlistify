@@ -1,4 +1,4 @@
-package com.example.playlistify.service.userservice;
+package com.example.playlistify.service;
 
 
 
@@ -28,25 +28,7 @@ public class UserService {
 
     }
 
-    public List<Item> getLikedSongs() throws Exception {
 
-        List<Item> songs = new ArrayList<>();
-
-        String url = "https://api.spotify.com/v1/me/tracks?limit=50";
-
-        while (url != null) {
-
-            LikedSongsResponse response = spotifyHttpService.get(url, LikedSongsResponse.class);
-
-            songs.addAll(response.getItems());
-
-            url = response.getNext();
-        }
-
-        System.out.println("Total songs fetched: " + songs.size());
-
-        return songs;
-    }
 }
 
 
