@@ -47,5 +47,36 @@ public class MusicAnalysisService {
         return artistDetailsMap;
 
     }
+    public Map<String, Set<Track>> buildGenreMap(List<Item> likedSongs, Map<String, ArtistDetails> artistDetailsById) {
 
-}
+        Map<String, Set<Track>> genreMap = new HashMap<>();
+
+        for (Item item : likedSongs) {
+
+            Track track = item.getTrack();
+
+            List<Artist> artists = track.getArtists();
+
+            for (Artist artist : artists) {
+
+                ArtistDetails artistDetails =
+                        artistDetailsById.get(artist.getId());
+
+                List<String> genres = artistDetails.getGenres();
+
+                for (String genre : genres) {
+
+                    if (!genreMap.containsKey(genre)) {
+                        genreMap.put(genre, new HashSet<>());
+                    }
+
+                    genreMap.get(genre).add(track);
+                }
+            }
+        }
+
+        return genreMap;
+    }
+    }
+
+
