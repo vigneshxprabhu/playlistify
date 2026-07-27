@@ -11,7 +11,7 @@ import java.net.http.HttpResponse;
 
 @Service
 public class SpotifyHttpUtil {
-
+    private static final String BASE_URL = "https://api.spotify.com/v1";
     private final AuthService authService;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;

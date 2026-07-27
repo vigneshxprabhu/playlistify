@@ -32,13 +32,20 @@ public class MusicAnalysisService {
     return artistIds;
     }
 
-//    public ArtistDetails fetchArtistDetails(String artistId){
-//
-//    }
-//    public Map<String, ArtistDetails> fetchArtistDetails(Set<String> artistIds){
-//
-//    }
-//    public Map<String, List<String>> buildGenreCache(Set<String> artistIds){
-//
-//    }
+    public ArtistDetails fetchArtistDetails(String artistId) throws Exception{
+        String url = "https://api.spotify.com/v1/artists/" + artistId;
+
+        return spotifyHttpUtil.get(url, ArtistDetails.class);
+
+    }
+    public Map<String, ArtistDetails> fetchArtistDetails(Set<String> artistIds) throws Exception{
+        Map<String, ArtistDetails> artistDetailsMap = new HashMap<>();
+        for(String artistid:artistIds){
+            ArtistDetails artistDetails=fetchArtistDetails(artistid);
+            artistDetailsMap.put(artistid, artistDetails);
+        }
+        return artistDetailsMap;
+
+    }
+
 }
