@@ -77,6 +77,7 @@ public class SpotifyHttpUtil {
 
         HttpRequest request = buildRequest(method, url, body);
 
+
         HttpResponse<String> response =
                 httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 

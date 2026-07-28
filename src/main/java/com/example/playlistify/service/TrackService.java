@@ -3,10 +3,11 @@ package com.example.playlistify.service;
 import com.example.playlistify.Util.SpotifyHttpUtil;
 import com.example.playlistify.dto.response.likedsongs.Item;
 import com.example.playlistify.dto.response.likedsongs.LikedSongsResponse;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class TrackService {
 
     private final SpotifyHttpUtil spotifyHttpService;

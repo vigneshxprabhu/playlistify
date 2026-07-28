@@ -28,7 +28,7 @@ public class AuthController {
         String clientId = "77cbc600bcff4fc7a57269fb6912b909";
 
         String redirectUri = "http://127.0.0.1:8080/playlistify/callback";
-        String scope = "user-library-read";
+        String scope = "user-library-read playlist-modify-private playlist-modify-public";
         String state = "12345";
 
         String url =
