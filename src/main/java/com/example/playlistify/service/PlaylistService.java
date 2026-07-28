@@ -1,9 +1,16 @@
 package com.example.playlistify.service;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+
 import com.example.playlistify.Util.SpotifyHttpUtil;
+import com.example.playlistify.dto.request.AddTracksRequest;
 import com.example.playlistify.dto.request.CreatePlaylistRequest;
+import com.example.playlistify.dto.response.likedsongs.Track;
 import com.example.playlistify.dto.response.playlistresponse.PlaylistResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Service;
 
 @Service
 public class PlaylistService {
@@ -12,6 +19,8 @@ public class PlaylistService {
     public PlaylistService(SpotifyHttpUtil spotifyHttpUtil) {
         this.spotifyHttpUtil = spotifyHttpUtil;
     }
+
+
     public PlaylistResponse createPlaylist(String name, String description, boolean isPublic) throws Exception{
         CreatePlaylistRequest request=new CreatePlaylistRequest();
         request.setName(name);
@@ -24,6 +33,23 @@ public class PlaylistService {
 
 
         return spotifyHttpUtil.post(url, requestBody, PlaylistResponse.class);
+
+    }
+
+    private List<String> extractTrackUris(Set<Track> tracks){
+        List<String> trackUris = new ArrayList<>();
+        for(Track track:tracks){
+          trackUris.add(track.getUri());
+        }
+            return trackUris;
+        
+    }
+
+    public void addTracksToPlaylist(String playlistId, List<String> trackUris)throws Exception{
+
+        AddTracksRequest request=new AddTracksRequest();
+
+        
 
     }
 
