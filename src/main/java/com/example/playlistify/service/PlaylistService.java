@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.playlistify.Util.SpotifyHttpUtil;
 import com.example.playlistify.dto.request.AddTracksRequest;
 import com.example.playlistify.dto.request.CreatePlaylistRequest;
+import com.example.playlistify.dto.response.likedsongs.Item;
 import com.example.playlistify.dto.response.likedsongs.Track;
 import com.example.playlistify.dto.response.playlistresponse.PlaylistResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,9 +16,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class PlaylistService {
     private final SpotifyHttpUtil spotifyHttpUtil;
+    private final TrackService trackService;
+    private final MusicAnalysisService musicAnalysisService;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    public PlaylistService(SpotifyHttpUtil spotifyHttpUtil) {
+
+    public PlaylistService(
+            SpotifyHttpUtil spotifyHttpUtil,
+            TrackService trackService,
+            MusicAnalysisService musicAnalysisService) {
+
         this.spotifyHttpUtil = spotifyHttpUtil;
+        this.trackService = trackService;
+        this.musicAnalysisService = musicAnalysisService;
     }
 
 
@@ -45,11 +55,26 @@ public class PlaylistService {
         
     }
 
-    public void addTracksToPlaylist(String playlistId, List<String> trackUris)throws Exception{
+   public void addTracksToPlaylist(String playlistId, List<String> trackUris) throws Exception {
 
-        AddTracksRequest request=new AddTracksRequest();
+    AddTracksRequest request = new AddTracksRequest();
+    request.setUris(trackUris);
 
-        
+    String requestBody = objectMapper.writeValueAsString(request);
+
+    String url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks";
+
+    spotifyHttpUtil.post(url, requestBody, Object.class);
+}
+
+   public void createGenrePlaylist(String genre) throws Exception {
+        List<Item> likedSongs = trackService.getLikedSongs();
+
+        System.out.println("Liked Songs: " + likedSongs.size());
+
+        Set<String> artistIds = musicAnalysisService.getUniqueArtistIds(likedSongs);
+
+        System.out.println("Unique Artists: " + artistIds.size());
 
     }
 
