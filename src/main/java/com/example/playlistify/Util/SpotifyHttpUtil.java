@@ -1,13 +1,14 @@
 package com.example.playlistify.Util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.example.playlistify.service.AuthService;
-import org.springframework.stereotype.Service;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import org.springframework.stereotype.Service;
+
+import com.example.playlistify.service.AuthService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class SpotifyHttpUtil {
@@ -91,6 +92,9 @@ public class SpotifyHttpUtil {
         }
 
         if (response.statusCode() >= 400) {
+            System.out.println("Status Code: " + response.statusCode());
+System.out.println("Headers: " + response.headers().map());
+System.out.println("Body: " + response.body());
             throw new RuntimeException(
                     "Spotify API Error: " +
                             response.statusCode() +

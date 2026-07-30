@@ -1,19 +1,26 @@
 package com.example.playlistify.service;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+
 import com.example.playlistify.Util.SpotifyHttpUtil;
 import com.example.playlistify.dto.response.analysis.ArtistDetails;
 import com.example.playlistify.dto.response.likedsongs.Artist;
 import com.example.playlistify.dto.response.likedsongs.Item;
 import com.example.playlistify.dto.response.likedsongs.Track;
-import org.springframework.stereotype.Service;
-
-import java.util.*;
 @Service
 public class MusicAnalysisService {
     private final SpotifyHttpUtil spotifyHttpUtil;
+    private final ArtistCacheService artistCacheService;
 
-    public MusicAnalysisService(SpotifyHttpUtil spotifyHttpUtil) {
+    public MusicAnalysisService(SpotifyHttpUtil spotifyHttpUtil ,ArtistCacheService artistCacheService) {
         this.spotifyHttpUtil = spotifyHttpUtil;
+        this.artistCacheService=artistCacheService;
     }
 
     public Set<String> getUniqueArtistIds(List<Item> likedSongs){
@@ -32,21 +39,65 @@ public class MusicAnalysisService {
     return artistIds;
     }
 
-    public ArtistDetails fetchArtistDetails(String artistId) throws Exception{
-        String url = "https://api.spotify.com/v1/artists/" + artistId;
 
-        return spotifyHttpUtil.get(url, ArtistDetails.class);
+//     public ArtistsResponse fetchArtistDetailsBatch(List<String> artistIds) throws Exception {
 
+//     String ids = String.join(",", artistIds);
+
+//     String url = "https://api.spotify.com/v1/artists?ids=" + ids;
+
+//     System.out.println(url);
+
+//     System.out.println("Fetching batch of " + artistIds.size() + " artists");
+
+//     return spotifyHttpUtil.get(url, ArtistsResponse.class);
+// }
+
+   public ArtistDetails fetchArtistDetails(String artistId) throws Exception {
+
+    ArtistDetails cachedArtist = artistCacheService.get(artistId);
+
+    if (cachedArtist != null) {
+        System.out.println("Cache Hit: " + artistId);
+        return cachedArtist;
     }
-    public Map<String, ArtistDetails> fetchArtistDetails(Set<String> artistIds) throws Exception{
-        Map<String, ArtistDetails> artistDetailsMap = new HashMap<>();
-        for(String artistid:artistIds){
-            ArtistDetails artistDetails=fetchArtistDetails(artistid);
-            artistDetailsMap.put(artistid, artistDetails);
+
+    String url = "https://api.spotify.com/v1/artists/" + artistId;
+    System.out.println("Fetching from Spotify: " + artistId);
+
+    ArtistDetails artist =spotifyHttpUtil.get(url, ArtistDetails.class);
+    System.out.println("Successfully fetched: " + artistId);
+
+    artistCacheService.put(artistId, artist);
+
+    System.out.println("Cached: " + artist.getName());
+
+    return artist;
+}
+
+
+
+
+        public Map<String, ArtistDetails> fetchArtistDetails(Set<String> artistIds) throws Exception {
+
+            Map<String, ArtistDetails> artistDetailsMap = new HashMap<>();
+
+            try {
+
+                for (String artistId : artistIds) {
+
+                    ArtistDetails artistDetails = fetchArtistDetails(artistId);
+                    artistDetailsMap.put(artistId, artistDetails);
+                }
+
+            } finally {
+
+                artistCacheService.save();
+            }
+
+            return artistDetailsMap;
         }
-        return artistDetailsMap;
 
-    }
     public Map<String, Set<Track>> buildGenreMap(List<Item> likedSongs, Map<String, ArtistDetails> artistDetailsById) {
 
         Map<String, Set<Track>> genreMap = new HashMap<>();

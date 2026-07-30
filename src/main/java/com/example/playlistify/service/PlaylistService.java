@@ -1,6 +1,7 @@
 package com.example.playlistify.service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.playlistify.Util.SpotifyHttpUtil;
 import com.example.playlistify.dto.request.AddTracksRequest;
 import com.example.playlistify.dto.request.CreatePlaylistRequest;
+import com.example.playlistify.dto.response.analysis.ArtistDetails;
 import com.example.playlistify.dto.response.likedsongs.Item;
 import com.example.playlistify.dto.response.likedsongs.Track;
 import com.example.playlistify.dto.response.playlistresponse.PlaylistResponse;
@@ -68,6 +70,7 @@ public class PlaylistService {
 }
 
    public void createGenrePlaylist(String genre) throws Exception {
+        long startTime = System.currentTimeMillis();
         List<Item> likedSongs = trackService.getLikedSongs();
 
         System.out.println("Liked Songs: " + likedSongs.size());
@@ -75,6 +78,16 @@ public class PlaylistService {
         Set<String> artistIds = musicAnalysisService.getUniqueArtistIds(likedSongs);
 
         System.out.println("Unique Artists: " + artistIds.size());
+        Map<String, ArtistDetails> artistDetails =
+        musicAnalysisService.fetchArtistDetails(artistIds);
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("--------------------------------");
+        System.out.println("Total Execution Time: "
+        + (endTime - startTime) + " ms");
+        System.out.println("--------------------------------");
+
+        System.out.println("Artist details fetched: " + artistDetails.size());
 
     }
 
