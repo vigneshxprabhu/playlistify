@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
+import com.example.playlistify.Metrics.PerformanceMetrics;
 import com.example.playlistify.Util.SpotifyHttpUtil;
 import com.example.playlistify.dto.response.analysis.ArtistDetails;
 import com.example.playlistify.dto.response.likedsongs.Artist;
@@ -16,10 +17,12 @@ import com.example.playlistify.dto.response.likedsongs.Track;
 @Service
 public class MusicAnalysisService {
     private final SpotifyHttpUtil spotifyHttpUtil;
+    private final PerformanceMetrics performanceMetrics;
     private final ArtistCacheService artistCacheService;
 
-    public MusicAnalysisService(SpotifyHttpUtil spotifyHttpUtil ,ArtistCacheService artistCacheService) {
+    public MusicAnalysisService(SpotifyHttpUtil spotifyHttpUtil ,ArtistCacheService artistCacheService ,PerformanceMetrics performanceMetrics) {
         this.spotifyHttpUtil = spotifyHttpUtil;
+        this.performanceMetrics=performanceMetrics;
         this.artistCacheService=artistCacheService;
     }
 
@@ -54,13 +57,25 @@ public class MusicAnalysisService {
 // }
 
    public ArtistDetails fetchArtistDetails(String artistId) throws Exception {
+   
 
     ArtistDetails cachedArtist = artistCacheService.get(artistId);
 
-    if (cachedArtist != null) {
-        System.out.println("Cache Hit: " + artistId);
-        return cachedArtist;
+  if (cachedArtist != null) {
+
+    performanceMetrics.setCacheHits(
+            performanceMetrics.getCacheHits() + 1);
+
+    System.out.println("Cache Hit: " + artistId);
+
+    return cachedArtist;
     }
+    performanceMetrics.setCacheMisses(
+        performanceMetrics.getCacheMisses() + 1);
+
+    performanceMetrics.setSpotifyApiCalls(
+        performanceMetrics.getSpotifyApiCalls() + 1);
+
 
     String url = "https://api.spotify.com/v1/artists/" + artistId;
     System.out.println("Fetching from Spotify: " + artistId);
@@ -82,6 +97,10 @@ public class MusicAnalysisService {
 
             Map<String, ArtistDetails> artistDetailsMap = new HashMap<>();
 
+            performanceMetrics.reset();
+            performanceMetrics.setArtistsRequested(artistIds.size());
+            performanceMetrics.startTimer();
+
             try {
 
                 for (String artistId : artistIds) {
@@ -92,7 +111,11 @@ public class MusicAnalysisService {
 
             } finally {
 
+                performanceMetrics.stopTimer();
+
                 artistCacheService.save();
+
+                performanceMetrics.printReport();
             }
 
             return artistDetailsMap;
