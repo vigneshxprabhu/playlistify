@@ -78,9 +78,13 @@ public class MusicAnalysisService {
 
 
     String url = "https://api.spotify.com/v1/artists/" + artistId;
+    
     System.out.println("Fetching from Spotify: " + artistId);
 
     ArtistDetails artist =spotifyHttpUtil.get(url, ArtistDetails.class);
+    System.out.println(artist.getName());
+System.out.println(artist.getGenres());
+System.out.println(artist.getPopularity());
     System.out.println("Successfully fetched: " + artistId);
 
     artistCacheService.put(artistId, artist);
@@ -120,6 +124,7 @@ public class MusicAnalysisService {
 
             return artistDetailsMap;
         }
+       
 
     public Map<String, Set<Track>> buildGenreMap(List<Item> likedSongs, Map<String, ArtistDetails> artistDetailsById) {
 

@@ -70,8 +70,12 @@ public class PlaylistService {
 }
 
    public void createGenrePlaylist(String genre) throws Exception {
+
+    
         long startTime = System.currentTimeMillis();
+        
         List<Item> likedSongs = trackService.getLikedSongs();
+        
 
         System.out.println("Liked Songs: " + likedSongs.size());
 

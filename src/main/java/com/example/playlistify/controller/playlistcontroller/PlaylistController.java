@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.playlistify.dto.request.GenrePlaylistRequest;
 import com.example.playlistify.dto.response.playlistresponse.PlaylistResponse;
+import com.example.playlistify.service.MusicAnalysisService;
 import com.example.playlistify.service.PlaylistService;
 
 @RestController
@@ -15,9 +16,11 @@ import com.example.playlistify.service.PlaylistService;
 public class PlaylistController {
 
     private final PlaylistService playlistService;
+    private final MusicAnalysisService musicAnalysisService;
 
-    public PlaylistController(PlaylistService playlistService) {
+    public PlaylistController(PlaylistService playlistService ,MusicAnalysisService musicAnalysisService1) {
         this.playlistService = playlistService;
+        this.musicAnalysisService=musicAnalysisService1;
     }
 
     @GetMapping("/playlist/create")
@@ -35,4 +38,7 @@ public class PlaylistController {
 
     playlistService.createGenrePlaylist(request.getGenre());
     }
+
+ 
+    
 }
