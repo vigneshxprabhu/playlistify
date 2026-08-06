@@ -13,7 +13,7 @@ public class PerformanceMetrics {
     private long endTime;
     private int cacheHits;
     private int cacheMisses;
-    private int spotifyApiCalls;
+    private int apiCalls;
     private int artistsRequested;
 
     public void startTimer() {
@@ -34,7 +34,7 @@ public class PerformanceMetrics {
     System.out.println("Artists Requested : " + artistsRequested);
     System.out.println("Cache Hits        : " + cacheHits);
     System.out.println("Cache Misses      : " + cacheMisses);
-    System.out.println("Spotify API Calls : " + spotifyApiCalls);
+    System.out.println("API Calls         : " + apiCalls);
     System.out.println("Execution Time    : " + getExecutionTime() + " ms");
     System.out.println("========================================");
     System.out.println();
@@ -43,7 +43,7 @@ public class PerformanceMetrics {
 
     cacheHits = 0;
     cacheMisses = 0;
-    spotifyApiCalls = 0;
+    apiCalls = 0;
     artistsRequested = 0;
     startTime = 0;
     endTime = 0;
