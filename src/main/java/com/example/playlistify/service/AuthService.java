@@ -1,17 +1,19 @@
 package com.example.playlistify.service;
 
-import com.example.playlistify.dto.response.tokenresponse.TokenResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.example.playlistify.dto.response.tokenresponse.TokenResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.Getter;
 
 @Service
 public class AuthService {
@@ -98,8 +100,7 @@ public class AuthService {
 
               this.accessToken = token.getAccessToken();
 
-              // Spotify may or may not return a new refresh token.
-              // Only replace it if a new one is provided.
+            
               if (token.getRefreshToken() != null) {
                      this.refreshToken = token.getRefreshToken();
               }
