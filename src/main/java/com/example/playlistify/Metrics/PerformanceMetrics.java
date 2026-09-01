@@ -1,4 +1,4 @@
-package com.example.playlistify.Metrics;
+package com.example.playlistify.metrics;
 
 import org.springframework.stereotype.Component;
 

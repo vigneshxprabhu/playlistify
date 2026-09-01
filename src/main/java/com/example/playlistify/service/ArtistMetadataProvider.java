@@ -1,6 +1,6 @@
 package com.example.playlistify.service;
 
-import com.example.playlistify.dto.response.analysis.ArtistDetails;
+import com.example.playlistify.model.ArtistDetails;
 
 public interface ArtistMetadataProvider {
 

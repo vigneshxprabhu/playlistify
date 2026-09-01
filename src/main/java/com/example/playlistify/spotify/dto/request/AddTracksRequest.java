@@ -1,5 +1,6 @@
-package com.example.playlistify.dto.request;
+package com.example.playlistify.spotify.dto.request;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenrePlaylistRequest {
+public class AddTracksRequest {
 
-    private String genre;
-    private String playlistName;
+    private List<String> uris;
 }

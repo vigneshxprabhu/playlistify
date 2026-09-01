@@ -8,11 +8,11 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.example.playlistify.Metrics.PerformanceMetrics;
-import com.example.playlistify.dto.response.analysis.ArtistDetails;
-import com.example.playlistify.dto.response.likedsongs.Artist;
-import com.example.playlistify.dto.response.likedsongs.Item;
-import com.example.playlistify.dto.response.likedsongs.Track;
+import com.example.playlistify.metrics.PerformanceMetrics;
+import com.example.playlistify.model.ArtistDetails;
+import com.example.playlistify.spotify.dto.response.Artist;
+import com.example.playlistify.spotify.dto.response.Item;
+import com.example.playlistify.spotify.dto.response.Track;
 
 @Service
 public class MusicAnalysisService {
