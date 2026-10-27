@@ -1,28 +1,35 @@
 package com.example.playlistify.musicbrainz.service;
+
 import com.example.playlistify.model.ArtistDetails;
 import com.example.playlistify.musicbrainz.client.MusicBrainzClient;
+import com.example.playlistify.musicbrainz.dto.response.MusicBrainzArtistResponse;
 import com.example.playlistify.musicbrainz.dto.response.MusicBrainzArtistSearchResponse;
 import com.example.playlistify.service.ArtistMetadataProvider;
 
-public class MusicBrainzProvider implements ArtistMetadataProvider{
+public class MusicBrainzProvider implements ArtistMetadataProvider {
 
     private final MusicBrainzClient musicBrainzClient;
+
     public MusicBrainzProvider(MusicBrainzClient musicBrainzClient) {
-    this.musicBrainzClient = musicBrainzClient;
-}
+        this.musicBrainzClient = musicBrainzClient;
+    }
 
     @Override
-    public ArtistDetails fetchArtistDetails (String artistName)throws Exception{
-    
-           MusicBrainzArtistSearchResponse searchResponse =musicBrainzClient.searchArtist(artistName);
+    public ArtistDetails fetchArtistDetails(String artistName) throws Exception {
 
-            String mbid = searchResponse.getArtists().get(0).getId();
+        MusicBrainzArtistSearchResponse searchResponse =
+                musicBrainzClient.searchArtist(artistName);
 
-             System.out.println("Artist: " + artistName);
-            System.out.println("MBID: " + mbid);
+        String mbid = searchResponse.getArtists().get(0).getId();
 
+        System.out.println("Artist: " + artistName);
+        System.out.println("MBID: " + mbid);
+
+        MusicBrainzArtistResponse artistResponse =
+                musicBrainzClient.getArtist(mbid);
+
+        System.out.println("Genres: " + artistResponse.getGenres());
 
         return null;
-
     }
 }

@@ -56,6 +56,8 @@ public class ArtistCacheService {
     System.out.println("Loaded " + cache.size() + " artists from cache.");
 
     cache.putAll(loadedCache);
+
+    System.out.println("Loaded " + cache.size() + " artists from cache.");
 }
 
 @PostConstruct

@@ -7,6 +7,7 @@ import java.net.http.HttpResponse;
 
 import com.example.playlistify.musicbrainz.dto.response.MusicBrainzArtistResponse;
 import com.example.playlistify.musicbrainz.dto.response.MusicBrainzArtistSearchResponse;
+import com.example.playlistify.musicbrainz.dto.response.MusicBrainzArtistSearchResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MusicBrainzClient {
@@ -17,62 +18,76 @@ public class MusicBrainzClient {
                 + artistName
                 + "&fmt=json&limit=1";
 
-                HttpClient client = HttpClient.newHttpClient();
+        HttpClient client = HttpClient.newHttpClient();
 
-                HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("User-Agent", "Playlistify/1.0")
-                    .GET()
-                    .build();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("User-Agent", "Playlistify/1.0")
+                .GET()
+                .build();
 
-                    HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
 
-                    System.out.println(response.body());
+        ObjectMapper objectMapper = new ObjectMapper();
 
-                    return null;
-
+        return objectMapper.readValue(
+                response.body(),
+                MusicBrainzArtistSearchResponse.class
+        );
     }
+
     public MusicBrainzArtistResponse getArtist(String mbid) throws Exception {
 
-        String url ="https://musicbrainz.org/ws/2/artist/"
-        +mbid
-        +"?inc=genres&fmt=json";
+        String url = "https://musicbrainz.org/ws/2/artist/"
+                + mbid
+                + "?inc=genres&fmt=json";
 
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create(url))
-        .header("User-Agent", "Playlistify/1.0")
-        .GET()
-        .build();
+                .uri(URI.create(url))
+                .header("User-Agent", "Playlistify/1.0")
+                .GET()
+                .build();
 
-
-        HttpResponse <String> response=client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        System.out.println(response.body());
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        MusicBrainzArtistResponse artistResponse =
-        objectMapper.readValue(
+        return objectMapper.readValue(
                 response.body(),
                 MusicBrainzArtistResponse.class
         );
-        return artistResponse;
-
-    
-
     }
 
     public static void main(String[] args) throws Exception {
 
-    MusicBrainzClient client = new MusicBrainzClient();
+        MusicBrainzClient client = new MusicBrainzClient();
 
-    client.searchArtist("Metallica");
-    MusicBrainzArtistResponse artist =
-            client.getArtist("65f4f0c5-ef9e-490c-aee3-909e7ae6b2ab");
+        MusicBrainzArtistSearchResponse search =
+                client.searchArtist("Metallica");
 
-    System.out.println("Artist: " + artist.getName());
-    System.out.println("Genres: " + artist.getGenres());
+        MusicBrainzArtistSearchResult result =
+                search.getArtists().get(0);
+
+        String artistName = result.getName();
+        String mbid = result.getId();
+
+        System.out.println("Artist: " + artistName);
+        System.out.println("MBID: " + mbid);
+
+        MusicBrainzArtistResponse artist =
+                client.getArtist(mbid);
+
+        System.out.println("Artist: " + artist.getName());
+        System.out.println("MBID: " + artist.getId());
+
+        System.out.println("Genres:");
+
+        artist.getGenres().forEach(
+                genre -> System.out.println("- " + genre.getName())
+        );
     }
 }
