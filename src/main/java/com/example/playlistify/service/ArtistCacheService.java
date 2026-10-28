@@ -25,15 +25,15 @@ public class ArtistCacheService {
   
     @Value("${playlistify.cache.path}")
     private String cacheFile;
-    public ArtistDetails get(String artistId) {
-    return cache.get(artistId);
+    public ArtistDetails get(String artistName) {
+    return cache.get(artistName);
     }
 
-   public void put(String artistId, ArtistDetails artist) throws IOException {
+   public void put(String artistName, ArtistDetails artist) throws IOException {
 
-    cache.put(artistId, artist);
+    cache.put(artistName, artist);
 
-    
+     
     }
 
     public void save() throws IOException {
@@ -53,7 +53,6 @@ public class ArtistCacheService {
     }
 
     Map<String, ArtistDetails> loadedCache =objectMapper.readValue(file,new TypeReference<Map<String, ArtistDetails>>() {});
-    System.out.println("Loaded " + cache.size() + " artists from cache.");
 
     cache.putAll(loadedCache);
 
@@ -65,7 +64,6 @@ public void initialize() {
 
     try {
         load();
-        System.out.println("Loaded " + cache.size() + " artists from cache.");
     } catch (IOException e) {
         System.out.println("Failed to load cache.");
         e.printStackTrace();

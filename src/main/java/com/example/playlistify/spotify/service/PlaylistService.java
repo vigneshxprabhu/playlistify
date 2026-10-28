@@ -73,28 +73,17 @@ public class PlaylistService {
 
    public void createGenrePlaylist(String genre) throws Exception {
 
-    
-        long startTime = System.currentTimeMillis();
-        
         List<Item> likedSongs = trackService.getLikedSongs();
-        
 
-        System.out.println("Liked Songs: " + likedSongs.size());
+        Set<String> artistNames = musicAnalysisService.getUniqueArtistNames(likedSongs);
 
-        Set<String> artistIds = musicAnalysisService.getUniqueArtistIds(likedSongs);
-
-        System.out.println("Unique Artists: " + artistIds.size());
         Map<String, ArtistDetails> artistDetails =
-        musicAnalysisService.fetchArtistDetails(artistIds);
-        long endTime = System.currentTimeMillis();
+        musicAnalysisService.fetchArtistDetails(artistNames);
 
-        System.out.println("--------------------------------");
-        System.out.println("Total Execution Time: "
-        + (endTime - startTime) + " ms");
-        System.out.println("--------------------------------");
+        Map<String, Set<Track>> genreMap =
+                musicAnalysisService.buildGenreMap(likedSongs, artistDetails);
 
-        System.out.println("Artist details fetched: " + artistDetails.size());
-
+        System.out.println("Genre map entries: " + genreMap.size());
     }
 
 

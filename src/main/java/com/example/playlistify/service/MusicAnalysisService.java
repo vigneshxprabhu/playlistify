@@ -30,17 +30,16 @@ public class MusicAnalysisService {
         this.artistCacheService = artistCacheService;
     }
 
-    public Set<String> getUniqueArtistIds(List<Item> likedSongs) {
-        Set<String> artistIds = new HashSet<>();
+    public Set<String> getUniqueArtistNames(List<Item> likedSongs) {
+        Set<String> artistNames = new HashSet<>();
         for (Item item : likedSongs) {
             Track track = item.getTrack();
             List<Artist> artists = track.getArtists();
             for (Artist artist : artists) {
-                String artistId = artist.getId();
-                artistIds.add(artistId);
+                artistNames.add(artist.getName());
             }
         }
-        return artistIds;
+        return artistNames;
     }
 
     public ArtistDetails fetchArtistDetails(String artistName) throws Exception {
@@ -48,7 +47,6 @@ public class MusicAnalysisService {
         if (cachedArtist != null) {
             performanceMetrics.setCacheHits(
                     performanceMetrics.getCacheHits() + 1);
-            System.out.println("Cache Hit: " + artistName);
             return cachedArtist;
         }
         performanceMetrics.setCacheMisses(
@@ -56,15 +54,9 @@ public class MusicAnalysisService {
         performanceMetrics.setApiCalls(
                 performanceMetrics.getApiCalls() + 1);
 
-        System.out.println("Fetching artist metadata from provider: " + artistName);
-
         ArtistDetails artist = artistMetadataProvider.fetchArtistDetails(artistName);
-        System.out.println(artist.getName());
-        System.out.println(artist.getGenres());
-        System.out.println("Successfully fetched: " + artistName);
 
         artistCacheService.put(artistName, artist);
-        System.out.println("Cached: " + artist.getName());
 
         return artist;
     }
@@ -88,16 +80,18 @@ public class MusicAnalysisService {
         return artistDetailsMap;
     }
 
-    public Map<String, Set<Track>> buildGenreMap(
-            List<Item> likedSongs,
-            Map<String, ArtistDetails> artistDetailsById) {
+    public Map<String, Set<Track>> buildGenreMap(List<Item> likedSongs, Map<String, ArtistDetails> artistDetailsByArtistName) {
         Map<String, Set<Track>> genreMap = new HashMap<>();
         for (Item item : likedSongs) {
             Track track = item.getTrack();
             List<Artist> artists = track.getArtists();
             for (Artist artist : artists) {
                 ArtistDetails artistDetails =
-                        artistDetailsById.get(artist.getId());
+                        artistDetailsByArtistName.get(artist.getName());
+                if (artistDetails == null) {
+                    System.out.println("No artist metadata found for: " + artist.getName());
+                    continue;
+                }
                 List<String> genres = artistDetails.getGenres();
                 for (String genre : genres) {
                     if (!genreMap.containsKey(genre)) {

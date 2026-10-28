@@ -92,9 +92,6 @@ public class SpotifyHttpUtil {
         }
 
         if (response.statusCode() >= 400) {
-            System.out.println("Status Code: " + response.statusCode());
-System.out.println("Headers: " + response.headers().map());
-System.out.println("Body: " + response.body());
             throw new RuntimeException(
                     "Spotify API Error: " +
                             response.statusCode() +

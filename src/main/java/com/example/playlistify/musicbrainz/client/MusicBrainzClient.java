@@ -1,21 +1,28 @@
 package com.example.playlistify.musicbrainz.client;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+
+import org.springframework.stereotype.Service;
 
 import com.example.playlistify.musicbrainz.dto.response.MusicBrainzArtistResponse;
 import com.example.playlistify.musicbrainz.dto.response.MusicBrainzArtistSearchResponse;
 import com.example.playlistify.musicbrainz.dto.response.MusicBrainzArtistSearchResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Service
 public class MusicBrainzClient {
 
     public MusicBrainzArtistSearchResponse searchArtist(String artistName) throws Exception {
 
+        String encodedArtistName = URLEncoder.encode(artistName, StandardCharsets.UTF_8);
+
         String url = "https://musicbrainz.org/ws/2/artist/?query=artist:"
-                + artistName
+                + encodedArtistName
                 + "&fmt=json&limit=1";
 
         HttpClient client = HttpClient.newHttpClient();
